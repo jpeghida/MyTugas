@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>MyTugas</title>
+  <style>
+    :root {
+      --bg: #f1f1f1;
+      --text: #000;
+      --card: #fff;
+      --accent: #4CAF50;
+      --strike: #555;
+    }
+
+    [data-theme="dark"] {
+      --bg: #121212;
+      --text: #eee;
+      --card: #1f1f1f;
+      --accent: #81C784;
+      --strike: #aaa;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .toggle-theme {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.4s ease-in-out;
+    }
+
+    .toggle-theme svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--card);
+      transition: transform 0.3s ease;
+    }
+
+    h2, p {
+      text-align: center;
+    }
+
+    p {
+      font-style: italic;
+      color: var(--strike);
+      margin-top: 0;
+    }
+
+    .container {
+      background-color: var(--card);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 600px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      color: var(--text);
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    button {
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background-color: var(--card);
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text);
+    }
+
+    .task-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .task-actions button {
+      background-color: #ff6347;
+      margin-left: 5px;
+    }
+
+    .task-actions button.edit {
+      background-color: #ffa500;
+    }
+
+    #filterCourse, #sortSelect {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <button class="toggle-theme" onclick="toggleTheme()">
+    <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M12 3a9 9 0 0 0 0 18c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/>
+    </svg>
+  </button>
+  <div class="container">
+    <h2>MyTugas</h2>
+    <p>Aplikasi reminder tugas untuk kamu yang (katanya) sibuk terus.</p>
+
+    <label for="name">Nama</label>
+    <input type="text" id="name" placeholder="Masukkan nama Anda">
+
+    <label for="npm">NPM</label>
+    <input type="text" id="npm" placeholder="Masukkan NPM Anda">
+
+    <label for="course">Mata Kuliah</label>
+    <select id="course">
+      <option value="">-- Pilih Mata Kuliah --</option>
+      <option value="Teori Graph">Teori Graph</option>
+      <option value="Keamanan Sistem">Keamanan Sistem</option>
+      <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
+      <option value="Pengantar Pemrograman Web">Pengantar Pemrograman Web</option>
+      <option value="Jaringan Komputer 2">Jaringan Komputer 2</option>
+      <option value="Multimedia dan Animasi">Multimedia dan Animasi</option>
+      <option value="Riset Teknologi dan Informasi">Riset Teknologi dan Informasi</option>
+      <option value="Pemrograman Visual 2">Pemrograman Visual 2</option>
+      <option value="Matematika Diskrit">Matematika Diskrit</option>
+      <option value="Bahasa Inggris 2">Bahasa Inggris 2</option>
+    </select>
+
+    <label for="taskType">Contoh Tugas</label>
+    <input type="text" id="taskType" placeholder="Contoh: Quiz, Mereview Jurnal">
+
+    <label for="deadline">Tanggal Deadline</label>
+    <input type="date" id="deadline">
+
+    <button onclick="addTask()">Submit</button>
+    <button onclick="resetForm()">Reset</button>
+
+    <label for="filterCourse">Filter Mata Kuliah</label>
+    <select id="filterCourse" onchange="renderTasks()">
+      <option value="">-- Tampilkan Semua --</option>
+      <option value="Teori Graph">Teori Graph</option>
+      <option value="Keamanan Sistem">Keamanan Sistem</option>
+      <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
+      <option value="Pengantar Pemrograman Web">Pengantar Pemrograman Web</option>
+      <option value="Jaringan Komputer 2">Jaringan Komputer 2</option>
+      <option value="Multimedia dan Animasi">Multimedia dan Animasi</option>
+      <option value="Riset Teknologi dan Informasi">Riset Teknologi dan Informasi</option>
+      <option value="Pemrograman Visual 2">Pemrograman Visual 2</option>
+      <option value="Matematika Diskrit">Matematika Diskrit</option>
+      <option value="Bahasa Inggris 2">Bahasa Inggris 2</option>
+    </select>
+
+    <label for="sortSelect">Urutkan</label>
+    <select id="sortSelect" onchange="renderTasks()">
+      <option value="">-- Default --</option>
+      <option value="deadline">Deadline Terdekat</option>
+      <option value="course">Mata Kuliah A-Z</option>
+    </select>
+
+    <ul id="taskList"></ul>
+  </div>
+
+  <script>
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    let isDark = false;
+
+    function addTask() {
+      const name = document.getElementById("name").value;
+      const npm = document.getElementById("npm").value;
+      const course = document.getElementById("course").value;
+      const taskType = document.getElementById("taskType").value;
+      const deadline = document.getElementById("deadline").value;
+      if (!name || !npm || !course || !taskType || !deadline) return alert("Isi semua data dong 🙄");
+      const task = { id: Date.now(), name, npm, course, taskType, deadline, done: false };
+      tasks.push(task);
+      saveTasks();
+      renderTasks();
+      resetForm(false);
+    }
+
+    function renderTasks() {
+      const list = document.getElementById("taskList");
+      if (!list) return;
+      const filter = document.getElementById("filterCourse").value;
+      const sortBy = document.getElementById("sortSelect").value;
+      list.innerHTML = "";
+      let filtered = [...tasks];
+      if (filter) filtered = filtered.filter(t => t.course === filter);
+      if (sortBy === "deadline") filtered.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+      if (sortBy === "course") filtered.sort((a, b) => a.course.localeCompare(b.course));
+
+      filtered.forEach(task => {
+        const li = document.createElement("li");
+        const info = document.createElement("div");
+        info.className = "task-info";
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = task.done;
+        checkbox.onchange = () => { task.done = checkbox.checked; saveTasks(); renderTasks(); };
+        const label = document.createElement("label");
+        label.innerText = `${task.name} - ${task.npm} | ${task.course} | ${task.taskType} | Deadline: ${task.deadline}`;
+        if (task.done) label.style.textDecoration = "line-through";
+        info.appendChild(checkbox);
+        info.appendChild(label);
+
+        const actions = document.createElement("div");
+        actions.className = "task-actions";
+        const editBtn = document.createElement("button");
+        editBtn.innerText = "Edit";
+        editBtn.className = "edit";
+        editBtn.onclick = () => editTask(task.id);
+        const delBtn = document.createElement("button");
+        delBtn.innerText = "Hapus";
+        delBtn.onclick = () => deleteTask(task.id);
+        actions.appendChild(editBtn);
+        actions.appendChild(delBtn);
+
+        li.appendChild(info);
+        li.appendChild(actions);
+        list.appendChild(li);
+      });
+    }
+
+    function saveTasks() {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function deleteTask(id) {
+      tasks = tasks.filter(task => task.id !== id);
+      saveTasks();
+      renderTasks();
+    }
+
+    function editTask(id) {
+      const task = tasks.find(t => t.id === id);
+      document.getElementById("name").value = task.name;
+      document.getElementById("npm").value = task.npm;
+      document.getElementById("course").value = task.course;
+      document.getElementById("taskType").value = task.taskType;
+      document.getElementById("deadline").value = task.deadline;
+      deleteTask(id);
+    }
+
+    function resetForm(clear = true) {
+      if (clear) {
+        document.getElementById("name").value = "";
+        document.getElementById("npm").value = "";
+      }
+      document.getElementById("course").value = "";
+      document.getElementById("taskType").value = "";
+      document.getElementById("deadline").value = "";
+    }
+
+    function toggleTheme() {
+      isDark = !isDark;
+      document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+      const icon = document.getElementById("themeIcon");
+      icon.innerHTML = isDark
+        ? '<path d="M21.64 13.11a9 9 0 1 1-10.75-10.75 7 7 0 1 0 10.75 10.75z"/>'
+        : '<path d="M12 3a9 9 0 0 0 0 18c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/>';
+      renderTasks(); // Refresh tampilan saat tema berubah
+    }
+
+    // Jalankan saat semua elemen sudah siap
+    window.addEventListener('DOMContentLoaded', renderTasks);
+  </script>
+</body>
+</html>

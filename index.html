@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>MyTugas</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/script.js" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <button class="toggle-theme" onclick="toggleTheme()">
+    <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M12 3a9 9 0 0 0 0 18c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/>
+    </svg>
+  </button>
+  
+  <div class="container">
+    <h2>MyTugas</h2>
+    <p>Aplikasi reminder tugas untuk kamu yang (katanya) sibuk terus.</p>
+
+<blockquote id="quoteBox" style="margin-top:10px;font-style:italic;color:var(--strike);text-align:center;"></blockquote>
+
+
+    <label for="name">Nama</label>
+    <input type="text" id="name" placeholder="Masukkan nama Anda">
+
+    <label for="npm">NPM</label>
+    <input type="text" id="npm" placeholder="Masukkan NPM Anda" minlength="10" maxlength="10" pattern="\d{10}" required>
+
+    <label for="course">Mata Kuliah</label>
+    <select id="course">
+      <option value="">-- Pilih Mata Kuliah --</option>
+      <option value="Teori Graph">Teori Graph (Timbo Faritcan Parlaungan Siallagan, S.T., M.Kom.)</option>
+      <option value="Keamanan Sistem">Keamanan Sistem (Hermansyah Nur Ahmad, S.T., M.Kom.)</option>
+      <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak (Carkiman, S.Kom., M.Kom.)</option>
+      <option value="Pengantar Pemrograman Web">Pengantar Pemrograman Web (Aa Zezen Zaenal Abidin, S.Pd., S.T., M.Cs.)</option>
+      <option value="Jaringan Komputer 2">Jaringan Komputer 2 (Anderias Eko Wijaya, S.T., M.Kom.)</option>
+      <option value="Multimedia dan Animasi">Multimedia dan Animasi (Rian Hermawan, M.Kom.)</option>
+      <option value="Riset Teknologi dan Informasi">Riset Teknologi dan Informasi (Aa Zezen Zaenal Abidin, S.Pd., S.T., M.Cs.)</option>
+      <option value="Pemrograman Visual 2">Pemrograman Visual 2 (Hermansyah Nur Ahmad, S.T., M.Kom.)</option>
+      <option value="Matematika Diskrit">Matematika Diskrit (Usep Tatang Suryadi, S.T., M.Kom.)</option>
+      <option value="Bahasa Inggris 2">Bahasa Inggris 2 (Gigin Ginanjar Sapari, M.Pd.)</option>
+    </select>
+
+    <label for="taskType">Jenis Tugas</label>
+    <input type="text" id="taskType" placeholder="Contoh: Quiz, Mereview Jurnal">
+
+    <label for="deadline">Deadline</label>
+    <input type="date" id="deadline">
+
+    <button onclick="addTask()">Submit</button>
+    <button onclick="resetForm()">Reset</button>
+    <button onclick="downloadTasks()">Download Tugas</button>
+
+    <label for="filterCourse">Filter Mata Kuliah</label>
+    <select id="filterCourse" onchange="renderTasks()">
+      <option value="">-- Tampilkan Semua --</option>
+      <!-- (opsi sama seperti di atas) -->
+    </select>
+
+    <label for="sortSelect">Urutkan</label>
+    <select id="sortSelect" onchange="renderTasks()">
+      <option value="">-- Default --</option>
+      <option value="deadline">Deadline Terdekat</option>
+      <option value="course">Mata Kuliah A-Z</option>
+    </select>
+
+    <div id="taskStats" style="margin: 10px 0; font-weight: bold; color: var(--text); text-align: center;"></div>
+
+<audio id="notifSound" src="assets/sound/bell.mp3" preload="auto"></audio>
+
+    <ul id="taskList"></ul>
+    <div style="text-align: center; margin-top: 20px;">
+  <button onclick="clearAllTasks()" style="background-color: crimson; color: white; padding: 10px 15px; border: none; border-radius: 5px;">
+    Hapus Semua Tugas
+  </button>
+</div>
+  </div>
+</body>
+</html>
